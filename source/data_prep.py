@@ -34,6 +34,8 @@ class DataPrep:
         with open("config/bdd_data.yaml") as f:
             self.config = yaml.safe_load(f)
 
+        self.class_map = {v: k for k, v in self.config["names"].items()}
+
         # generated yolo annotations path parallel to images
         self.label_path = os.path.join(
             self.root_path, "bdd100k_images_100k/bdd100k/labels/100k"
@@ -75,8 +77,6 @@ class DataPrep:
 
         """
         img_size = self.img_size
-        class_count = {}
-        class_map = {v: k for k, v in self.config["names"].items()}
         for items in os.listdir(path):
             dataset = items.split("_")[-1][:-5]
             os.makedirs(os.path.join(self.label_path, dataset), exist_ok=True)
@@ -113,25 +113,19 @@ class DataPrep:
                                     b["x2"],
                                     b["y2"],
                                 )
-                                w, h = abs(x2 - x1) / 2, abs(y2 - y1) / 2
+                                w, h = abs(x2 - x1), abs(y2 - y1)
                                 cx, cy = x1 + (w / 2), y1 + (h / 2)
-                                c = class_map[label["category"]]
-                                if c in class_count:
-                                    class_count[c][0] += 1
-                                else:
-                                    class_count[c] = [1, label["category"]]
+                                c = self.class_map[label["category"]]
                                 f2.write(
                                     "%d %f %f %f %f\n"
                                     % (c, cx / W, cy / H, w / W, h / H)
                                 )
-        # for i, cls in enumerate(sorted(class_count.keys())):
-        #     print(f"{i} # {cls}, {class_count[cls]}")
         logger.info("Dataset is ready for YoloV5")
 
 
 def main():
     """Driver function to prepare dataset in yolo format"""
-    DataPrep("/home/danish/danish/datasets/assignment_data_bdd")
+    DataPrep(path="/home/danish/danish/datasets/assignment_data_bdd")
 
 
 if __name__ == "__main__":
