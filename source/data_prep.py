@@ -56,6 +56,18 @@ class DataPrep:
         """
         return os.path.exists(self.label_path)
 
+    def get_json_data(self, path: str) -> list:
+        """Function to load json and return data
+
+        Args:
+            path(str): path to json file
+        """
+        data = []
+        if path.endswith(".json"):
+            with open(path, "r") as fp:
+                data = json.load(fp)
+        return data
+
     def prep_labels(self, path: str) -> None:
         """Function to load, convert and save anotataions to yolo format.
         Args:
@@ -63,54 +75,57 @@ class DataPrep:
 
         """
         img_size = self.img_size
+        class_count = {}
         class_map = {v: k for k, v in self.config["names"].items()}
         for items in os.listdir(path):
             dataset = items.split("_")[-1][:-5]
             os.makedirs(os.path.join(self.label_path, dataset), exist_ok=True)
             logger.info(f"Preparing dataset for: {dataset}")
             with open(os.path.join(os.path.dirname(path), dataset + ".txt"), "w") as f1:
-                anns_path = os.path.join(path, items)
-                if anns_path.endswith(".json"):
-                    with open(anns_path, "r") as fp:
-                        data = json.load(fp)
-                    for d in tqdm(data):
-                        img_path = os.path.join(
-                            self.image_path, items.split("_")[-1][:-5], d["name"]
-                        )
-                        f1.write(f"{img_path}\n")
-                        with open(
-                            os.path.join(
-                                self.label_path,
-                                dataset,
-                                os.path.basename(img_path).replace("jpg", "txt"),
-                            ),
-                            "w",
-                        ) as f2:
-                            if not self.img_size:
-                                img_size = Image.open(
-                                    os.path.join(
-                                        self.image_path,
-                                        items.split("_")[-1][:-5],
-                                        d["name"],
-                                    )
+                for d in tqdm(self.get_json_data(os.path.join(path, items))):
+                    img_path = os.path.join(
+                        self.image_path, items.split("_")[-1][:-5], d["name"]
+                    )
+                    f1.write(f"{img_path}\n")
+                    with open(
+                        os.path.join(
+                            self.label_path,
+                            dataset,
+                            os.path.basename(img_path).replace("jpg", "txt"),
+                        ),
+                        "w",
+                    ) as f2:
+                        if not self.img_size:
+                            img_size = Image.open(
+                                os.path.join(
+                                    self.image_path,
+                                    items.split("_")[-1][:-5],
+                                    d["name"],
                                 )
-                            W, H = img_size
-                            for label in data[0]["labels"]:
-                                if "box2d" in label:
-                                    b = label["box2d"]
-                                    x1, y1, x2, y2 = (
-                                        b["x1"],
-                                        b["y1"],
-                                        b["x2"],
-                                        b["y2"],
-                                    )
-                                    w, h = abs(x2 - x1) / 2, abs(y2 - y1) / 2
-                                    cx, cy = x1 + (w / 2), y1 + (h / 2)
-                                    c = class_map[label["category"]]
-                                    f2.write(
-                                        "%d %f %f %f %f\n"
-                                        % (c, cx / W, cy / H, w / W, h / H)
-                                    )
+                            )
+                        W, H = img_size
+                        for label in d["labels"]:
+                            if "box2d" in label:
+                                b = label["box2d"]
+                                x1, y1, x2, y2 = (
+                                    b["x1"],
+                                    b["y1"],
+                                    b["x2"],
+                                    b["y2"],
+                                )
+                                w, h = abs(x2 - x1) / 2, abs(y2 - y1) / 2
+                                cx, cy = x1 + (w / 2), y1 + (h / 2)
+                                c = class_map[label["category"]]
+                                if c in class_count:
+                                    class_count[c][0] += 1
+                                else:
+                                    class_count[c] = [1, label["category"]]
+                                f2.write(
+                                    "%d %f %f %f %f\n"
+                                    % (c, cx / W, cy / H, w / W, h / H)
+                                )
+        # for i, cls in enumerate(sorted(class_count.keys())):
+        #     print(f"{i} # {cls}, {class_count[cls]}")
         logger.info("Dataset is ready for YoloV5")
 
 
