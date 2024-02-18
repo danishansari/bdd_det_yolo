@@ -9,7 +9,9 @@ from typing import Any
 import argparse
 
 parser = argparse.ArgumentParser("Yolv5 Training")
-parser.add_argument("-w", "--weights", default="yolov5s.pt", help="path to weights")
+parser.add_argument(
+    "-w", "--weights", default="weight/yolov5s.pt", help="path to weights"
+)
 parser.add_argument(
     "-s", "--image-size", default=640, help="image input size to the model"
 )
@@ -40,7 +42,7 @@ def main(args: Any) -> None:
     Args:
         args(Any): command line arguments
     """
-    model = YOLO(args.weights)
+    model = YOLO("yolov5s.yaml").load_weights(args.weight)
     train(model, args.config, args.epochs, args.image_size, args.batch)
 
 
