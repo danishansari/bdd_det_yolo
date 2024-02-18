@@ -38,7 +38,7 @@ def train(model: YOLO, data: str, epochs: int, imgsz: int, batch: int) -> None:
         batch(int): batch size for training
     """
     # Prepare dataset
-    DataPrep(args.datapath)
+    DataPrep(args.data_path)
     # Train the model
     model.train(data=data, epochs=epochs, imgsz=imgsz, batch=batch)
 
