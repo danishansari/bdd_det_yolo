@@ -91,35 +91,61 @@ class DataPrep:
                         os.path.join(
                             self.label_path,
                             dataset,
-                            os.path.basename(img_path).replace("jpg", "txt"),
+                            os.path.basename(img_path).replace(".jpg", ".txt"),
                         ),
                         "w",
                     ) as f2:
-                        if not self.img_size:
-                            img_size = Image.open(
-                                os.path.join(
-                                    self.image_path,
-                                    items.split("_")[-1][:-5],
-                                    d["name"],
+                        with open(
+                            os.path.join(
+                                self.label_path,
+                                dataset,
+                                os.path.basename(img_path).replace(".jpg", "_meta.csv"),
+                            ),
+                            "w",
+                        ) as f3:
+                            if not self.img_size:
+                                img_size = Image.open(
+                                    os.path.join(
+                                        self.image_path,
+                                        items.split("_")[-1][:-5],
+                                        d["name"],
+                                    )
                                 )
-                            )
-                        W, H = img_size
-                        for label in d["labels"]:
-                            if "box2d" in label:
-                                b = label["box2d"]
-                                x1, y1, x2, y2 = (
-                                    b["x1"],
-                                    b["y1"],
-                                    b["x2"],
-                                    b["y2"],
-                                )
-                                w, h = abs(x2 - x1), abs(y2 - y1)
-                                cx, cy = x1 + (w / 2), y1 + (h / 2)
-                                c = self.class_map[label["category"]]
-                                f2.write(
-                                    "%d %f %f %f %f\n"
-                                    % (c, cx / W, cy / H, w / W, h / H)
-                                )
+                            W, H = img_size
+                            for label in d["labels"]:
+                                if "box2d" in label:
+                                    b = label["box2d"]
+                                    x1, y1, x2, y2 = (
+                                        b["x1"],
+                                        b["y1"],
+                                        b["x2"],
+                                        b["y2"],
+                                    )
+                                    w, h = abs(x2 - x1), abs(y2 - y1)
+                                    cx, cy = x1 + (w / 2), y1 + (h / 2)
+                                    c = self.class_map[label["category"]]
+                                    f2.write(
+                                        "%d %f %f %f %f\n"
+                                        % (
+                                            c,
+                                            cx / W,
+                                            cy / H,
+                                            w / W,
+                                            h / H,
+                                        )
+                                    )
+
+                                    f3.write(
+                                        "%d, %d, %d, %s, %s, %s\n"
+                                        % (
+                                            c,
+                                            label["attributes"]["occluded"],
+                                            label["attributes"]["truncated"],
+                                            d["attributes"]["weather"],
+                                            d["attributes"]["scene"],
+                                            d["attributes"]["timeofday"],
+                                        )
+                                    )
         logger.info("Dataset is ready for YoloV5")
 
 

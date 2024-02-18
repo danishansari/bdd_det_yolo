@@ -37,7 +37,7 @@ class BDDLoader(Dataset):
     def on_epoch_start(self) -> None:
         random.shuffle(self.files)
 
-    def get_labels(self, index: int) -> List:
+    def get_labels_n_attribs(self, index: int) -> List:
         txt_files = (
             self.files[index].replace("/images", "/labels").replace(".jpg", ".txt")
         )
@@ -48,7 +48,16 @@ class BDDLoader(Dataset):
                     v = line.strip().split(" ")
                     c = int(v[0])  # class
                     labels.append([c, list(map(float, v[1:]))])
-        return labels
+        txt_files = (
+            self.files[index].replace("/images", "/labels").replace(".jpg", "_meta.csv")
+        )
+        attributes = []
+        if os.path.exists(txt_files):
+            with open(txt_files) as f:
+                for line in f.readlines():
+                    v = line.strip().split(",")
+                    attributes.append(v)
+        return [labels, attributes]
 
     def scale_box(self, bboxes: List, xyxy: bool = True):
         sz = self.data.img_size
@@ -76,7 +85,8 @@ class BDDLoader(Dataset):
         image = Image.open(img_fname)  # RGB image
         if self.transform:
             pass
-        return image, self.get_labels(index)
+        labels, attribs = self.get_labels_n_attribs(index)
+        return image, labels, attribs
 
 
 def main():

@@ -1,6 +1,6 @@
-path: /home/danish/danish/datasets/assignment_data_bdd/bdd100k_images_100k/bdd100k/images/100k
-train: /home/danish/danish/datasets/assignment_data_bdd/bdd100k_labels_release/bdd100k/train.txt 
-val: /home/danish/danish/datasets/assignment_data_bdd/bdd100k_labels_release/bdd100k/val.txt 
+path: /dataset
+train: bdd100k_labels_release/bdd100k/train.txt 
+val:  bdd100k_labels_release/bdd100k/val.txt 
 
 # Classes
 names:
