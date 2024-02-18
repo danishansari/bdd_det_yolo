@@ -12,19 +12,27 @@ import argparse
 
 parser = argparse.ArgumentParser("Yolv5 Training")
 parser.add_argument(
-    "-w", "--weights", default="weights/yolov5s.pt", help="path to weights"
+    "-w", "--weights", type=str, default="weights/yolov5s.pt", help="path to weights"
 )
 parser.add_argument(
-    "-d", "--data-path", default="/dataset", help="root path to dataset"
+    "-d", "--data-path", type=str, default="/dataset", help="root path to dataset"
 )
 parser.add_argument(
-    "-s", "--image-size", default=640, help="image input size to the model"
+    "-s", "--image-size", type=int, default=640, help="image input size to the model"
 )
-parser.add_argument("-e", "--epochs", default=1, help="number of epochs for training")
 parser.add_argument(
-    "-c", "--config", default="config/bdd_data.yaml", help="path to model config"
+    "-e", "--epochs", type=int, default=1, help="number of epochs for training"
 )
-parser.add_argument("-b", "--batch", default=1, help="batch size to train model")
+parser.add_argument(
+    "-c",
+    "--config",
+    type=str,
+    default="config/bdd_data.yaml",
+    help="path to model config",
+)
+parser.add_argument(
+    "-b", "--batch", type=int, default=1, help="batch size to train model"
+)
 
 
 def train(model: YOLO, data: str, epochs: int, imgsz: int, batch: int) -> None:
