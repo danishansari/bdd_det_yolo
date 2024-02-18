@@ -20,7 +20,7 @@ parser.add_argument("-e", "--epochs", default=1, help="number of epochs for trai
 parser.add_argument(
     "-c", "--config", default="config/bdd_data.yaml", help="path to model config"
 )
-parser.add_argument("-b", "--batch", default=8, help="batch size to train model")
+parser.add_argument("-b", "--batch", default=1, help="batch size to train model")
 
 
 def train(model: YOLO, data: str, epochs: int, imgsz: int, batch: int) -> None:
