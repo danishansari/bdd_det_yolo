@@ -6,12 +6,16 @@ copyright: na
 
 import torch
 from ultralytics import YOLO
+from source.data_prep import DataPrep
 from typing import Any
 import argparse
 
 parser = argparse.ArgumentParser("Yolv5 Training")
 parser.add_argument(
     "-w", "--weights", default="weights/yolov5s.pt", help="path to weights"
+)
+parser.add_argument(
+    "-d", "--data-path", default="/dataset", help="root path to dataset"
 )
 parser.add_argument(
     "-s", "--image-size", default=640, help="image input size to the model"
@@ -33,6 +37,8 @@ def train(model: YOLO, data: str, epochs: int, imgsz: int, batch: int) -> None:
         imgsz(int): input image size to model
         batch(int): batch size for training
     """
+    # Prepare dataset
+    DataPrep(args.datapath)
     # Train the model
     model.train(data=data, epochs=epochs, imgsz=imgsz, batch=batch)
 
