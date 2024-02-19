@@ -1,4 +1,4 @@
-path: /dataset
+path: /home/danish/danish/datasets/assignment_data_bdd
 train: bdd100k_labels_release/bdd100k/train.txt 
 val:  bdd100k_labels_release/bdd100k/val.txt 
 
