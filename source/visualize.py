@@ -85,13 +85,13 @@ class Visualize:
         """Function to plot class wise data distribution"""
         data = self.train_val_data["train"]["class"].keys()
         train_count = [x[0] for x in self.train_val_data["train"]["class"].values()]
-        val_count = [x[0] for x in self.train_val_data["train"]["class"].values()]
+        val_count = [x[0] for x in self.train_val_data["val"]["class"].values()]
         X_axis = np.arange(len(data))
         plt.figure(figsize=(8, 6))
         plt.xticks(X_axis, data)
         plt.xticks(rotation=45, ha="right")
         plt.bar(X_axis - 0.2, train_count, 0.4, label="train")
-        plt.bar(X_axis + 0.2, val_count, 0.4, label="train")
+        plt.bar(X_axis + 0.2, val_count, 0.4, label="val")
         plt.legend()
         plt.xlabel("class")
         plt.ylabel("Number of samples")
@@ -173,15 +173,9 @@ class Visualize:
     def show_yolo_annotations(self):
         raise NotImplementedError
 
-
-def main():
-    v = Visualize(path="/dataset")
-    v.train_val_distribution()
-    v.class_wise_data_distribution()
-    v.object_size_distribution()
-    v.class_size_distribution()
-    v.data_attributes_distribution()
-
-
-if __name__ == "__main__":
-    main()
+    def all(self):
+        self.train_val_distribution()
+        self.class_wise_data_distribution()
+        self.object_size_distribution()
+        self.class_size_distribution()
+        self.data_attributes_distribution()
