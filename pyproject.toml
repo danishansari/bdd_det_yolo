@@ -13,6 +13,7 @@ pyyaml = "^6.0.1"
 tqdm = "^4.66.2"
 ultralytics = "^8.1.14"
 loguru = "^0.7.2"
+gdown = "^5.1.0"
 
 
 [build-system]
