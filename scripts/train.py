@@ -57,7 +57,7 @@ def main(args: Any) -> None:
     Args:
         args(Any): command line arguments
     """
-    model = YOLO("yolov5s.yaml").load(args.weights)
+    model = YOLO("yolov5s.yaml")
     train(model, args.config, args.epochs, args.image_size, args.batch)
 
 
