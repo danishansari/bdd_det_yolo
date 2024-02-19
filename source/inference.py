@@ -6,21 +6,20 @@ copyright: na
 
 from ultralytics import YOLO
 from data_loader import BDDLoader
+from tqdm import tqdm
 import argparse
 
 
 parser = argparse.ArgumentParser("Yolv5 Training")
 parser.add_argument(
-    "-w", "--weights", type=str, default="weights/yolov5s.pt", help="path to weights"
+    "-w",
+    "--weights",
+    type=str,
+    default="weights/yolov5s_bdd.pt",
+    help="path to weights",
 )
 parser.add_argument(
     "-d", "--data-path", type=str, default="/dataset", help="root path to dataset"
-)
-parser.add_argument(
-    "-s", "--image-size", type=int, default=640, help="image input size to the model"
-)
-parser.add_argument(
-    "-e", "--epochs", type=int, default=1, help="number of epochs for training"
 )
 parser.add_argument(
     "-c",
@@ -29,17 +28,29 @@ parser.add_argument(
     default="config/bdd_data.yaml",
     help="path to model config",
 )
-parser.add_argument(
-    "-b", "--batch", type=int, default=1, help="batch size to train model"
-)
 
 
-def main(args):
-    data = BDDLoader(args.data_path)
+def plot_predictions(image, bboxes):
+    pass
+
+
+def main(args, show=True):
+    data = BDDLoader(args.data_path, "val")
     model = YOLO(args.weights)
-    for image, _, _ in data:
-        result = model(image)
-        print(result)
+
+    for image, _, _ in tqdm(data):
+        result = model(image, verbose=False)
+        bboxes = []
+        for r in result:
+            name = r.names
+            pred = list(map(int, r.boxes.cls.numpy().tolist()))
+            conf = r.boxes.conf.numpy().tolist()
+            bbox = r.boxes.xyxy.numpy().tolist()
+            assert len(pred) == len(conf) == len(bbox)
+            for b, p, c in zip(bbox, pred, conf):
+                bboxes.append([list(map(int, b)), name[p], c])
+        if show:
+            plot_predictions(image, bboxes)
 
 
 if __name__ == "__main__":
