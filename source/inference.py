@@ -45,6 +45,8 @@ def inference(data_path: str, weights: str, classes: list = []) -> None:
         classes (list): list of classes to be considered only
     """
     data = BDDLoader(data_path, "val")
+    if not os.path.exists(weights):
+        os.system("sh weights/download.sh")
     model = YOLO(weights)
 
     for image, lab, attr in data:
