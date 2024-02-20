@@ -37,7 +37,7 @@ def plot_predictions(image: Image, preds: list, attr: list, fname: str):
 def inference(data_path: str, weights: str, classes: list = []) -> None:
     """Funtion to make prediction on val dataset and overlay on images
     click `enter` for next image
-    click `s` + 'enter` to save the plot
+    click `s` + `enter` to save the plot
 
     Args:
         data_path (str): dataset directory path
