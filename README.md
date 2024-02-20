@@ -47,7 +47,7 @@ We see here the winner is `ConvNext-S` model with AP = 36%, but one model which 
     python -m scripts.eval
 ```
 
-## Dataset vizualization
+## Dataset visualization
 ```
     python source/main.py -t/--task <data-viz/plot-viz/eval/infer>
 ```
