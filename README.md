@@ -31,11 +31,13 @@ We see here the winner is `ConvNext-S` model with AP = 36%, but one model which 
 - [Download](https://drive.google.com/file/d/1NgWX5YfEKbloAKX9l8kUVJFpWFlUO8UT/view) this dataset onto your local device.
 
 ## Dependencies
+checkout `pyproject.yaml` for more
 
     - python-3.11
     - torch-2.2.0+cu121
     - ultralytics
-checkout `pyproject.yaml` for more
+
+__Note:__ modify `config/bdd-data.yaml` and pass data-path with `-d/--data-path` argument for train/eval/infernce/visualize.
 
 ## Setup
 ### 1. Docker
