@@ -53,6 +53,7 @@ class DataPrep:
 
     def is_data_ready(self) -> bool:
         """Function to check is dataset already exists
+
         Returns:
             bool: whether or not labels-directory exists
         """
@@ -62,7 +63,7 @@ class DataPrep:
         """Function to load json and return data
 
         Args:
-            path(str): path to json file
+            path (str): path to json file
         """
         data = []
         if path.endswith(".json"):
@@ -72,8 +73,9 @@ class DataPrep:
 
     def prep_labels(self, path: str) -> None:
         """Function to load, convert and save anotataions to yolo format.
+
         Args:
-            path(str): path to json annotations files train/eval.json
+            path (str): path to json annotations files train/eval.json
 
         """
         img_size = self.img_size

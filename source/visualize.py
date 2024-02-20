@@ -9,6 +9,7 @@ from matplotlib import pyplot as plt
 from matplotlib.pyplot import cm
 import seaborn as sn
 import os
+from PIL import ImageDraw, ImageFont, ImageColor
 import numpy as np
 import pandas as pd
 
@@ -179,6 +180,7 @@ class Visualize:
         plt.savefig("plots/object_attr_dist.png")
 
     def train_size_vs_map(self):
+        """Function to plot train/val size vs map"""
         data = self.train_val_data["train"]["class"].keys()
         train_count = [x[0] for x in self.train_val_data["train"]["class"].values()]
         tot = sum(train_count)
@@ -197,13 +199,30 @@ class Visualize:
         plt.title("BDD dataset samples vs map distribution")
         plt.savefig("plots/sample_map_dist.png")
 
-    def show_yolo_annotations(self):
-        raise NotImplementedError
+    def show_yolo_annotations(self) -> None:
+        """Function to overlay annotations on images"""
+        os.makedirs("plots/images", exist_ok=True)
+        colors = list(ImageColor.colormap.keys())[:10]
+        font = ImageFont.truetype("plots/font/Arial.ttf", 24)
+        for img, lab, atr in self.val_loader:
+            draw = ImageDraw.Draw(img)
+            lab = self.val_loader.scale_box(lab)
+            for ann in lab:
+                c, b = ann
+                cls = self.val_loader.data.config["names"][c]
+                draw.rectangle(b, fill=None, outline=colors[c], width=3)
+                draw.text((b[0] + 5, b[1]), cls[:3], font=font, fill="red")
+            draw.text((5, 5), f"* {atr[0][3]}", align="left", font=font, fill="red")
+            draw.text((5, 25), f"* {atr[0][4]}", align="left", font=font, fill="red")
+            draw.text((5, 45), f"* {atr[0][5]}", align="left", font=font, fill="red")
+            img.save("plots/images/tmp.jpg")
+            if input("> ") == "s":
+                img.save(f"plots/images/{os.path.basename(self.val_loader.curr_fname)}")
 
     def all(self):
+        """Function to make all plots for data vizualization"""
         self.train_val_distribution()
         self.class_wise_data_distribution()
-
         self.object_size_distribution()
         self.class_size_distribution()
         self.data_attributes_distribution()

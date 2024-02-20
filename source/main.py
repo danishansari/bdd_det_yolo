@@ -15,7 +15,7 @@ parser.add_argument(
     "--task",
     type=str,
     default="inference",
-    choices=["data-visualize", "pred-eval", "infere"],
+    choices=["data-viz", "plot-viz", "pred-eval", "infer"],
 )
 parser.add_argument(
     "-d", "--data-path", type=str, default="/dataset", help="root path to dataset"
@@ -38,7 +38,10 @@ parser.add_argument(
 
 def main(args):
     """Main driver function to models and data analysis"""
-    if args.task == "data-visualize":
+    if args.task == "data-viz":
+        v = Visualize(args.data_path)
+        v.show_yolo_annotations()
+    elif args.task == "plot-viz":
         v = Visualize(args.data_path)
         v.all()
     elif args.task == "infer":

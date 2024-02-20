@@ -4,7 +4,6 @@ author: danish ansari
 copyright: na
 """
 
-import torch
 from ultralytics import YOLO
 from source.data_prep import DataPrep
 from typing import Any

@@ -5,17 +5,16 @@ author: danish ansari
 copyright: na
 """
 
-from torch.utils.data import Dataset, DataLoader
-from PIL import Image, ImageDraw
+from torch.utils.data import Dataset
 import random
 import os
+from PIL import Image
 from data_prep import DataPrep
-from matplotlib import pyplot as plt
 from typing import Any, List
 
 
 class BDDLoader(Dataset):
-    """ """
+    """BDD Dataset loader class"""
 
     def __init__(
         self, path: str, dataset: str, load_img: bool = True, transform: Any = None
@@ -25,9 +24,15 @@ class BDDLoader(Dataset):
         self.load_image = load_img
         self.data = DataPrep(path=path)
         self.transform = transform
+        self.curr_fname = ""
         self.files = self.load_img_files(dataset)
 
     def load_img_files(self, dataset: str) -> List:
+        """Function to load image files name into memory
+
+        Args:
+            dataset (str): dataset type - train/val
+        """
         image_path = os.path.join(self.data.image_path, dataset)
         fnames = []
         for files in os.listdir(image_path):
@@ -35,12 +40,19 @@ class BDDLoader(Dataset):
         return fnames
 
     def __len__(self) -> int:
+        """class atribute to return no of images present"""
         return len(self.files)
 
     def on_epoch_start(self) -> None:
+        """Function to shuffle image list"""
         random.shuffle(self.files)
 
     def get_labels_n_attribs(self, index: int) -> List:
+        """Function to get labels and attributes associated to images at a particular index
+
+        Args:
+            index (int): index location of image
+        """
         txt_files = (
             self.files[index].replace("/images", "/labels").replace(".jpg", ".txt")
         )
@@ -65,7 +77,13 @@ class BDDLoader(Dataset):
                     attributes.append(v)
         return [labels, attributes]
 
-    def scale_box(self, bboxes: List, xyxy: bool = True):
+    def scale_box(self, bboxes: list, xyxy: bool = True) -> list:
+        """Function to scale prediction to original image size
+
+        Args:
+            bboxes: list of bbox predicted
+            xyxy (bool): expected output format; defaults to True
+        """
         sz = self.data.img_size
         for c, bbox in bboxes:
             bbox[2] = bbox[2] * sz[0]  # width
@@ -78,16 +96,14 @@ class BDDLoader(Dataset):
             bbox[:] = list(map(int, bbox[-4:]))
         return bboxes
 
-    def plot_annotation(self, image: Image, anns: List) -> None:
-        draw = ImageDraw.Draw(image, "RGBA")
-        for ann in anns:
-            c, b = ann
-            draw.rectangle(((b[0], b[1]), (b[2], b[3])), fill=None, outline="red")
-        plt.imshow(image)
-        plt.show()
-
     def __getitem__(self, index: int) -> Any:
+        """Class attribute to get items at an index
+
+        Args:
+            index (int): index location to access
+        """
         image = self.files[index]
+        self.curr_fname = image
         if self.load_image:
             image = Image.open(image)  # RGB image
         if self.transform:
