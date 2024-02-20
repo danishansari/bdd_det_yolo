@@ -56,7 +56,8 @@ We see here the winner is `ConvNext-S` model with AP = 36%, but one model which 
 - eval: performs evaluation of models on different attributes
 - infer: performs model infernece in val dataset and overlayes predections and saves in plots/images/tmp.jpg
 
-### Documentation
+## [Documentation](https://danishansari.github.io/bdd_det_yolo/docs/source/index.html)
 ```
+    pdoc --html source -o docs
 ```
 
