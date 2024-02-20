@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>source.data_prep API documentation</title>
+<meta name="description" content="This file provides class implementation to prepare dataset for Yolo
+Work on bdd-dataset loads annoatation json, converts to yolo and save …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>source.data_prep</code></h1>
+</header>
+<section id="section-intro">
+<p>This file provides class implementation to prepare dataset for Yolo
+Work on bdd-dataset loads annoatation json, converts to yolo and save.</p>
+<p>author: danish ansari
+copyright: na</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;This file provides class implementation to prepare dataset for Yolo
+Work on bdd-dataset loads annoatation json, converts to yolo and save.
+
+author: danish ansari
+copyright: na
+&#34;&#34;&#34;
+
+import os
+import json
+from PIL import Image
+import yaml
+from tqdm import tqdm
+from loguru import logger
+
+
+class DataPrep:
+    &#34;&#34;&#34;
+    Class to prepare dataset to be consumed by Yolo (ultralytics)
+    - Takes bdd dataset root direcory as input
+    - Loads train/eval json files in memory
+    - Iterate over each image-name in loaded data
+    - converts and saves detection annotations to yolo format
+    &#34;&#34;&#34;
+
+    def __init__(self, path: str, img_size: tuple = (1280, 720)) -&gt; None:
+        self.root_path = path
+        # assignment_data_bdd/bdd100k_images_100k/bdd100k
+        self.image_path = os.path.join(
+            self.root_path, &#34;bdd100k_images_100k/bdd100k/images/100k&#34;
+        )
+        self.img_size = img_size
+
+        # load data-config
+        with open(&#34;config/bdd_data.yaml&#34;) as f:
+            self.config = yaml.safe_load(f)
+
+        self.class_map = {v: k for k, v in self.config[&#34;names&#34;].items()}
+
+        # generated yolo annotations path parallel to images
+        self.label_path = os.path.join(
+            self.root_path, &#34;bdd100k_images_100k/bdd100k/labels/100k&#34;
+        )
+
+        # generate yolo annotations if does not exists
+        if not self.is_data_ready():
+            os.makedirs(self.label_path)
+            # assignment_data_bdd/bdd100k_labels_release/bdd100k
+            self.prep_labels(
+                os.path.join(self.root_path, &#34;bdd100k_labels_release/bdd100k/labels&#34;)
+            )
+        else:
+            logger.info(f&#34;Dataset already prepared: {self.label_path}&#34;)
+
+    def is_data_ready(self) -&gt; bool:
+        &#34;&#34;&#34;Function to check is dataset already exists
+
+        Returns:
+            bool: whether or not labels-directory exists
+        &#34;&#34;&#34;
+        return os.path.exists(self.label_path)
+
+    def get_json_data(self, path: str) -&gt; list:
+        &#34;&#34;&#34;Function to load json and return data
+
+        Args:
+            path (str): path to json file
+        &#34;&#34;&#34;
+        data = []
+        if path.endswith(&#34;.json&#34;):
+            with open(path, &#34;r&#34;) as fp:
+                data = json.load(fp)
+        return data
+
+    def prep_labels(self, path: str) -&gt; None:
+        &#34;&#34;&#34;Function to load, convert and save anotataions to yolo format.
+
+        Args:
+            path (str): path to json annotations files train/eval.json
+
+        &#34;&#34;&#34;
+        img_size = self.img_size
+        for items in os.listdir(path):
+            dataset = items.split(&#34;_&#34;)[-1][:-5]
+            os.makedirs(os.path.join(self.label_path, dataset), exist_ok=True)
+            logger.info(f&#34;Preparing dataset for: {dataset}&#34;)
+            with open(os.path.join(os.path.dirname(path), dataset + &#34;.txt&#34;), &#34;w&#34;) as f1:
+                for d in tqdm(self.get_json_data(os.path.join(path, items))):
+                    img_path = os.path.join(
+                        self.image_path, items.split(&#34;_&#34;)[-1][:-5], d[&#34;name&#34;]
+                    )
+                    f1.write(f&#34;{img_path}\n&#34;)
+                    with open(
+                        os.path.join(
+                            self.label_path,
+                            dataset,
+                            os.path.basename(img_path).replace(&#34;.jpg&#34;, &#34;.txt&#34;),
+                        ),
+                        &#34;w&#34;,
+                    ) as f2:
+                        with open(
+                            os.path.join(
+                                self.label_path,
+                                dataset,
+                                os.path.basename(img_path).replace(&#34;.jpg&#34;, &#34;_meta.csv&#34;),
+                            ),
+                            &#34;w&#34;,
+                        ) as f3:
+                            if not self.img_size:
+                                img_size = Image.open(
+                                    os.path.join(
+                                        self.image_path,
+                                        items.split(&#34;_&#34;)[-1][:-5],
+                                        d[&#34;name&#34;],
+                                    )
+                                )
+                            W, H = img_size
+                            for label in d[&#34;labels&#34;]:
+                                if &#34;box2d&#34; in label:
+                                    b = label[&#34;box2d&#34;]
+                                    x1, y1, x2, y2 = (
+                                        b[&#34;x1&#34;],
+                                        b[&#34;y1&#34;],
+                                        b[&#34;x2&#34;],
+                                        b[&#34;y2&#34;],
+                                    )
+                                    w, h = abs(x2 - x1), abs(y2 - y1)
+                                    cx, cy = x1 + (w / 2), y1 + (h / 2)
+                                    c = self.class_map[label[&#34;category&#34;]]
+                                    f2.write(
+                                        &#34;%d %f %f %f %f\n&#34;
+                                        % (
+                                            c,
+                                            cx / W,
+                                            cy / H,
+                                            w / W,
+                                            h / H,
+                                        )
+                                    )
+
+                                    f3.write(
+                                        &#34;%d, %d, %d, %s, %s, %s\n&#34;
+                                        % (
+                                            c,
+                                            label[&#34;attributes&#34;][&#34;occluded&#34;],
+                                            label[&#34;attributes&#34;][&#34;truncated&#34;],
+                                            d[&#34;attributes&#34;][&#34;weather&#34;],
+                                            d[&#34;attributes&#34;][&#34;scene&#34;],
+                                            d[&#34;attributes&#34;][&#34;timeofday&#34;],
+                                        )
+                                    )
+        logger.info(&#34;Dataset is ready for YoloV5&#34;)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="source.data_prep.DataPrep"><code class="flex name class">
+<span>class <span class="ident">DataPrep</span></span>
+<span>(</span><span>path: str, img_size: tuple = (1280, 720))</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class to prepare dataset to be consumed by Yolo (ultralytics)
+- Takes bdd dataset root direcory as input
+- Loads train/eval json files in memory
+- Iterate over each image-name in loaded data
+- converts and saves detection annotations to yolo format</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataPrep:
+    &#34;&#34;&#34;
+    Class to prepare dataset to be consumed by Yolo (ultralytics)
+    - Takes bdd dataset root direcory as input
+    - Loads train/eval json files in memory
+    - Iterate over each image-name in loaded data
+    - converts and saves detection annotations to yolo format
+    &#34;&#34;&#34;
+
+    def __init__(self, path: str, img_size: tuple = (1280, 720)) -&gt; None:
+        self.root_path = path
+        # assignment_data_bdd/bdd100k_images_100k/bdd100k
+        self.image_path = os.path.join(
+            self.root_path, &#34;bdd100k_images_100k/bdd100k/images/100k&#34;
+        )
+        self.img_size = img_size
+
+        # load data-config
+        with open(&#34;config/bdd_data.yaml&#34;) as f:
+            self.config = yaml.safe_load(f)
+
+        self.class_map = {v: k for k, v in self.config[&#34;names&#34;].items()}
+
+        # generated yolo annotations path parallel to images
+        self.label_path = os.path.join(
+            self.root_path, &#34;bdd100k_images_100k/bdd100k/labels/100k&#34;
+        )
+
+        # generate yolo annotations if does not exists
+        if not self.is_data_ready():
+            os.makedirs(self.label_path)
+            # assignment_data_bdd/bdd100k_labels_release/bdd100k
+            self.prep_labels(
+                os.path.join(self.root_path, &#34;bdd100k_labels_release/bdd100k/labels&#34;)
+            )
+        else:
+            logger.info(f&#34;Dataset already prepared: {self.label_path}&#34;)
+
+    def is_data_ready(self) -&gt; bool:
+        &#34;&#34;&#34;Function to check is dataset already exists
+
+        Returns:
+            bool: whether or not labels-directory exists
+        &#34;&#34;&#34;
+        return os.path.exists(self.label_path)
+
+    def get_json_data(self, path: str) -&gt; list:
+        &#34;&#34;&#34;Function to load json and return data
+
+        Args:
+            path (str): path to json file
+        &#34;&#34;&#34;
+        data = []
+        if path.endswith(&#34;.json&#34;):
+            with open(path, &#34;r&#34;) as fp:
+                data = json.load(fp)
+        return data
+
+    def prep_labels(self, path: str) -&gt; None:
+        &#34;&#34;&#34;Function to load, convert and save anotataions to yolo format.
+
+        Args:
+            path (str): path to json annotations files train/eval.json
+
+        &#34;&#34;&#34;
+        img_size = self.img_size
+        for items in os.listdir(path):
+            dataset = items.split(&#34;_&#34;)[-1][:-5]
+            os.makedirs(os.path.join(self.label_path, dataset), exist_ok=True)
+            logger.info(f&#34;Preparing dataset for: {dataset}&#34;)
+            with open(os.path.join(os.path.dirname(path), dataset + &#34;.txt&#34;), &#34;w&#34;) as f1:
+                for d in tqdm(self.get_json_data(os.path.join(path, items))):
+                    img_path = os.path.join(
+                        self.image_path, items.split(&#34;_&#34;)[-1][:-5], d[&#34;name&#34;]
+                    )
+                    f1.write(f&#34;{img_path}\n&#34;)
+                    with open(
+                        os.path.join(
+                            self.label_path,
+                            dataset,
+                            os.path.basename(img_path).replace(&#34;.jpg&#34;, &#34;.txt&#34;),
+                        ),
+                        &#34;w&#34;,
+                    ) as f2:
+                        with open(
+                            os.path.join(
+                                self.label_path,
+                                dataset,
+                                os.path.basename(img_path).replace(&#34;.jpg&#34;, &#34;_meta.csv&#34;),
+                            ),
+                            &#34;w&#34;,
+                        ) as f3:
+                            if not self.img_size:
+                                img_size = Image.open(
+                                    os.path.join(
+                                        self.image_path,
+                                        items.split(&#34;_&#34;)[-1][:-5],
+                                        d[&#34;name&#34;],
+                                    )
+                                )
+                            W, H = img_size
+                            for label in d[&#34;labels&#34;]:
+                                if &#34;box2d&#34; in label:
+                                    b = label[&#34;box2d&#34;]
+                                    x1, y1, x2, y2 = (
+                                        b[&#34;x1&#34;],
+                                        b[&#34;y1&#34;],
+                                        b[&#34;x2&#34;],
+                                        b[&#34;y2&#34;],
+                                    )
+                                    w, h = abs(x2 - x1), abs(y2 - y1)
+                                    cx, cy = x1 + (w / 2), y1 + (h / 2)
+                                    c = self.class_map[label[&#34;category&#34;]]
+                                    f2.write(
+                                        &#34;%d %f %f %f %f\n&#34;
+                                        % (
+                                            c,
+                                            cx / W,
+                                            cy / H,
+                                            w / W,
+                                            h / H,
+                                        )
+                                    )
+
+                                    f3.write(
+                                        &#34;%d, %d, %d, %s, %s, %s\n&#34;
+                                        % (
+                                            c,
+                                            label[&#34;attributes&#34;][&#34;occluded&#34;],
+                                            label[&#34;attributes&#34;][&#34;truncated&#34;],
+                                            d[&#34;attributes&#34;][&#34;weather&#34;],
+                                            d[&#34;attributes&#34;][&#34;scene&#34;],
+                                            d[&#34;attributes&#34;][&#34;timeofday&#34;],
+                                        )
+                                    )
+        logger.info(&#34;Dataset is ready for YoloV5&#34;)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="source.data_prep.DataPrep.get_json_data"><code class="name flex">
+<span>def <span class="ident">get_json_data</span></span>(<span>self, path: str) ‑> list</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to load json and return data</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>path to json file</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_json_data(self, path: str) -&gt; list:
+    &#34;&#34;&#34;Function to load json and return data
+
+    Args:
+        path (str): path to json file
+    &#34;&#34;&#34;
+    data = []
+    if path.endswith(&#34;.json&#34;):
+        with open(path, &#34;r&#34;) as fp:
+            data = json.load(fp)
+    return data</code></pre>
+</details>
+</dd>
+<dt id="source.data_prep.DataPrep.is_data_ready"><code class="name flex">
+<span>def <span class="ident">is_data_ready</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to check is dataset already exists</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>whether or not labels-directory exists</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_data_ready(self) -&gt; bool:
+    &#34;&#34;&#34;Function to check is dataset already exists
+
+    Returns:
+        bool: whether or not labels-directory exists
+    &#34;&#34;&#34;
+    return os.path.exists(self.label_path)</code></pre>
+</details>
+</dd>
+<dt id="source.data_prep.DataPrep.prep_labels"><code class="name flex">
+<span>def <span class="ident">prep_labels</span></span>(<span>self, path: str) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to load, convert and save anotataions to yolo format.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
+<dd>path to json annotations files train/eval.json</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def prep_labels(self, path: str) -&gt; None:
+    &#34;&#34;&#34;Function to load, convert and save anotataions to yolo format.
+
+    Args:
+        path (str): path to json annotations files train/eval.json
+
+    &#34;&#34;&#34;
+    img_size = self.img_size
+    for items in os.listdir(path):
+        dataset = items.split(&#34;_&#34;)[-1][:-5]
+        os.makedirs(os.path.join(self.label_path, dataset), exist_ok=True)
+        logger.info(f&#34;Preparing dataset for: {dataset}&#34;)
+        with open(os.path.join(os.path.dirname(path), dataset + &#34;.txt&#34;), &#34;w&#34;) as f1:
+            for d in tqdm(self.get_json_data(os.path.join(path, items))):
+                img_path = os.path.join(
+                    self.image_path, items.split(&#34;_&#34;)[-1][:-5], d[&#34;name&#34;]
+                )
+                f1.write(f&#34;{img_path}\n&#34;)
+                with open(
+                    os.path.join(
+                        self.label_path,
+                        dataset,
+                        os.path.basename(img_path).replace(&#34;.jpg&#34;, &#34;.txt&#34;),
+                    ),
+                    &#34;w&#34;,
+                ) as f2:
+                    with open(
+                        os.path.join(
+                            self.label_path,
+                            dataset,
+                            os.path.basename(img_path).replace(&#34;.jpg&#34;, &#34;_meta.csv&#34;),
+                        ),
+                        &#34;w&#34;,
+                    ) as f3:
+                        if not self.img_size:
+                            img_size = Image.open(
+                                os.path.join(
+                                    self.image_path,
+                                    items.split(&#34;_&#34;)[-1][:-5],
+                                    d[&#34;name&#34;],
+                                )
+                            )
+                        W, H = img_size
+                        for label in d[&#34;labels&#34;]:
+                            if &#34;box2d&#34; in label:
+                                b = label[&#34;box2d&#34;]
+                                x1, y1, x2, y2 = (
+                                    b[&#34;x1&#34;],
+                                    b[&#34;y1&#34;],
+                                    b[&#34;x2&#34;],
+                                    b[&#34;y2&#34;],
+                                )
+                                w, h = abs(x2 - x1), abs(y2 - y1)
+                                cx, cy = x1 + (w / 2), y1 + (h / 2)
+                                c = self.class_map[label[&#34;category&#34;]]
+                                f2.write(
+                                    &#34;%d %f %f %f %f\n&#34;
+                                    % (
+                                        c,
+                                        cx / W,
+                                        cy / H,
+                                        w / W,
+                                        h / H,
+                                    )
+                                )
+
+                                f3.write(
+                                    &#34;%d, %d, %d, %s, %s, %s\n&#34;
+                                    % (
+                                        c,
+                                        label[&#34;attributes&#34;][&#34;occluded&#34;],
+                                        label[&#34;attributes&#34;][&#34;truncated&#34;],
+                                        d[&#34;attributes&#34;][&#34;weather&#34;],
+                                        d[&#34;attributes&#34;][&#34;scene&#34;],
+                                        d[&#34;attributes&#34;][&#34;timeofday&#34;],
+                                    )
+                                )
+    logger.info(&#34;Dataset is ready for YoloV5&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="source" href="index.html">source</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="source.data_prep.DataPrep" href="#source.data_prep.DataPrep">DataPrep</a></code></h4>
+<ul class="">
+<li><code><a title="source.data_prep.DataPrep.get_json_data" href="#source.data_prep.DataPrep.get_json_data">get_json_data</a></code></li>
+<li><code><a title="source.data_prep.DataPrep.is_data_ready" href="#source.data_prep.DataPrep.is_data_ready">is_data_ready</a></code></li>
+<li><code><a title="source.data_prep.DataPrep.prep_labels" href="#source.data_prep.DataPrep.prep_labels">prep_labels</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
