@@ -49,9 +49,9 @@ __Note:__ modify `config/bdd-data.yaml` and pass data-path with `-d/--data-path`
 ### 2. Conda & Poetry
 ```
     conda create -n bdd-yolo python==3.11
+    conda activate bdd-yolo
 
     sudo apt install python3-poetry
-
     poetry install
 ```
 
