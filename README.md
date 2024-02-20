@@ -37,7 +37,7 @@ checkout `pyproject.yaml` for more
     - torch-2.2.0+cu121
     - ultralytics
 
-__Note:__ modify `config/bdd-data.yaml` and pass data-path with `-d/--data-path` argument for train/eval/infernce/visualize.
+__Note:__ modify `config/bdd-data.yaml` and pass data-path with `-d/--data-path` argument for `train`/`eval`/`infernce`/`visualize`.
 
 ## Setup
 ### 1. Docker
