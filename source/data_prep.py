@@ -147,12 +147,3 @@ class DataPrep:
                                         )
                                     )
         logger.info("Dataset is ready for YoloV5")
-
-
-def main():
-    """Driver function to prepare dataset in yolo format"""
-    DataPrep(path="/home/danish/danish/datasets/assignment_data_bdd")
-
-
-if __name__ == "__main__":
-    main()

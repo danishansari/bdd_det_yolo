@@ -85,18 +85,26 @@ class Visualize:
         """Function to plot class wise data distribution"""
         data = self.train_val_data["train"]["class"].keys()
         train_count = [x[0] for x in self.train_val_data["train"]["class"].values()]
+        X_axis = np.arange(len(data))
+        plt.figure(figsize=(8, 6))
+        plt.xticks(X_axis, data)
+        plt.xticks(rotation=45, ha="right")
+        plt.bar(data, train_count, 0.4, color="blue")
+        plt.xlabel("class")
+        plt.ylabel("Number of samples")
+        plt.title("BDD dataset training class distribution")
+        plt.savefig("plots/training_class_dist.png")
+        data = self.train_val_data["val"]["class"].keys()
         val_count = [x[0] for x in self.train_val_data["val"]["class"].values()]
         X_axis = np.arange(len(data))
         plt.figure(figsize=(8, 6))
         plt.xticks(X_axis, data)
         plt.xticks(rotation=45, ha="right")
-        plt.bar(X_axis - 0.2, train_count, 0.4, label="train")
-        plt.bar(X_axis + 0.2, val_count, 0.4, label="val")
-        plt.legend()
+        plt.bar(data, val_count, 0.4, color="orange")
         plt.xlabel("class")
         plt.ylabel("Number of samples")
         plt.title("BDD dataset training class distribution")
-        plt.savefig("plots/training_class_dist.png")
+        plt.savefig("plots/eval_class_dist.png")
 
     def object_size_distribution(self):
         """Function to plot width/heigh confusion metrix"""
@@ -170,12 +178,33 @@ class Visualize:
             bottom += count
         plt.savefig("plots/object_attr_dist.png")
 
+    def train_size_vs_map(self):
+        data = self.train_val_data["train"]["class"].keys()
+        train_count = [x[0] for x in self.train_val_data["train"]["class"].values()]
+        tot = sum(train_count)
+        for i in range(len(train_count)):
+            train_count[i] /= tot
+        val_count = [0.57, 0.62, 0.77, 0.59, 0.43, 0.43, 0.62, 0.60, 0.42, 0.0]
+        X_axis = np.arange(len(data))
+        plt.figure(figsize=(8, 6))
+        plt.xticks(X_axis, data)
+        plt.xticks(rotation=45, ha="right")
+        plt.bar(X_axis - 0.2, train_count, 0.4, label="samples")
+        plt.bar(X_axis + 0.2, val_count, 0.4, label="mAP")
+        plt.legend()
+        plt.xlabel("class")
+        plt.ylabel("Number of samples")
+        plt.title("BDD dataset samples vs map distribution")
+        plt.savefig("plots/sample_map_dist.png")
+
     def show_yolo_annotations(self):
         raise NotImplementedError
 
     def all(self):
         self.train_val_distribution()
         self.class_wise_data_distribution()
+
         self.object_size_distribution()
         self.class_size_distribution()
         self.data_attributes_distribution()
+        self.train_size_vs_map()

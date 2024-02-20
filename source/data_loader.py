@@ -17,9 +17,12 @@ from typing import Any, List
 class BDDLoader(Dataset):
     """ """
 
-    def __init__(self, path: str, dataset: str, transform: Any = None) -> None:
+    def __init__(
+        self, path: str, dataset: str, load_img: bool = True, transform: Any = None
+    ) -> None:
         super().__init__()
         self.root_path = path
+        self.load_image = load_img
         self.data = DataPrep(path=path)
         self.transform = transform
         self.files = self.load_img_files(dataset)
@@ -56,6 +59,9 @@ class BDDLoader(Dataset):
             with open(txt_files) as f:
                 for line in f.readlines():
                     v = line.strip().split(",")
+                    for i in range(len(v)):
+                        v[i] = v[i].strip()
+                    v[:3] = list(map(int, v[:3]))
                     attributes.append(v)
         return [labels, attributes]
 
@@ -81,25 +87,10 @@ class BDDLoader(Dataset):
         plt.show()
 
     def __getitem__(self, index: int) -> Any:
-        img_fname = self.files[index]
-        image = Image.open(img_fname)  # RGB image
+        image = self.files[index]
+        if self.load_image:
+            image = Image.open(image)  # RGB image
         if self.transform:
             pass
         labels, attribs = self.get_labels_n_attribs(index)
         return image, labels, attribs
-
-
-def main():
-    d = BDDLoader(
-        path="/home/danish/danish/datasets/assignment_data_bdd", dataset="train"
-    )
-    d.on_epoch_start()
-    for i, img_lab in enumerate(d):
-        ann = d.scale_box(img_lab[1])
-        d.plot_annotation(img_lab[0], ann)
-        if i > 100:
-            break
-
-
-if __name__ == "__main__":
-    main()
