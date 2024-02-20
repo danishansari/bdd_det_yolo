@@ -39,11 +39,11 @@ parser.add_argument(
 def main(args):
     """Main driver function to models and data analysis
 
-    Args (command-line):
-        -t/--task: one of `data-viz`, `plot-viz`, `pred-eval`, `infer`; defaults to `infer`.
-        -d/--data-path: path to root directory of downloaded bdd-dataset.
-        -c/--config: path to yolo config-file; defaults to `config/bdd_data.yaml`.
-        -w/--weights: path to trained weights; defaults to `weights/yolov5s_bdd.pt`.
+    Args: (command-line)
+        `-t/--task`: one of `data-viz`, `plot-viz`, `pred-eval`, `infer`; defaults to `infer`.
+        `-d/--data-path`: path to root directory of downloaded bdd-dataset.
+        `-c/--config`: path to yolo config-file; defaults to `config/bdd_data.yaml`.
+        `-w/--weights`: path to trained weights; defaults to `weights/yolov5s_bdd.pt`.
 
     Note: if the model is not found it uses `weights/download.sh` script to download model.
     """
