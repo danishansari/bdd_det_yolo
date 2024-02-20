@@ -6,8 +6,8 @@ copyright: na
 
 from ultralytics import YOLO
 from source.data_prep import DataPrep
+import os
 import argparse
-
 
 parser = argparse.ArgumentParser("Yolv5 Training")
 parser.add_argument(
@@ -40,6 +40,8 @@ parser.add_argument(
 
 def main(args):
     DataPrep(args.data_path)
+    if not os.path.exists(args.weights):
+        os.system("sh weights/download.sh")
     model = YOLO(args.weights)
     model.val(data=args.config, batch=args.batch)
 

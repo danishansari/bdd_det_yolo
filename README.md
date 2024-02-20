@@ -30,24 +30,42 @@ We see here the winner is `ConvNext-S` model with AP = 36%, but one model which 
 ## Dataset
 - [Download](https://drive.google.com/file/d/1NgWX5YfEKbloAKX9l8kUVJFpWFlUO8UT/view) this dataset onto your local device.
 
-## Setup (docker)
+## Dependencies
+checkout `pyproject.yaml` for more
+
+    - python-3.11
+    - torch-2.2.0+cu121
+    - ultralytics
+
+__Note:__ modify `config/bdd-data.yaml` and pass data-path with `-d/--data-path` argument for `train`/`eval`/`infernce`/`visualize`.
+
+## Setup
+### 1. Docker
 ```
     docker  build -f docker/Dockerfile -tag bdd-yolo:latest
 
     docker run --rm --gpus all -v $(pwd):/yolo-bdd -v /path/to/bdd-root-dir:/dataset -it bdd-yolo:latest
 ```
+### 2. Conda & Poetry
+```
+    conda create -n bdd-yolo python==3.11
+    conda activate bdd-yolo
 
-## Training 
+    sudo apt install python3-poetry
+    poetry install
+```
+
+## Training (docker)
 ```
     python -m scripts.train -b/--bach <batch-size, default=1> -e/--epochs <num-epochs, default=1>
 ```
 
-## Benchmark
+## Benchmark (docker)
 ```
     python -m scripts.eval
 ```
 
-## Dataset vizulationzation
+## Dataset visualization (docker)
 ```
     python source/main.py -t/--task <data-viz/plot-viz/eval/infer>
 ```
@@ -58,6 +76,6 @@ We see here the winner is `ConvNext-S` model with AP = 36%, but one model which 
 
 ## [Documentation](https://danishansari.github.io/bdd_det_yolo/source/index.html)
 ```
-    pdoc3 --html source -o docs
+    pdoc --html source -o docs
 ```
 
