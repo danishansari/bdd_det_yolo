@@ -68,7 +68,7 @@ def plot_predictions(image: Image, preds: list, attr: list, fname: str):
 def inference(data_path: str, weights: str, classes: list = []) -&gt; None:
     &#34;&#34;&#34;Funtion to make prediction on val dataset and overlay on images
     click `enter` for next image
-    click `s` + &#39;enter` to save the plot
+    click `s` + `enter` to save the plot
 
     Args:
         data_path (str): dataset directory path
@@ -76,6 +76,8 @@ def inference(data_path: str, weights: str, classes: list = []) -&gt; None:
         classes (list): list of classes to be considered only
     &#34;&#34;&#34;
     data = BDDLoader(data_path, &#34;val&#34;)
+    if not os.path.exists(weights):
+        os.system(&#34;sh weights/download.sh&#34;)
     model = YOLO(weights)
 
     for image, lab, attr in data:
@@ -113,7 +115,7 @@ def inference(data_path: str, weights: str, classes: list = []) -&gt; None:
 <dd>
 <div class="desc"><p>Funtion to make prediction on val dataset and overlay on images
 click <code>enter</code> for next image
-click <code>s</code> + 'enter` to save the plot</p>
+click <code>s</code> + <code>enter</code> to save the plot</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>data_path</code></strong> :&ensp;<code>str</code></dt>
@@ -130,7 +132,7 @@ click <code>s</code> + 'enter` to save the plot</p>
 <pre><code class="python">def inference(data_path: str, weights: str, classes: list = []) -&gt; None:
     &#34;&#34;&#34;Funtion to make prediction on val dataset and overlay on images
     click `enter` for next image
-    click `s` + &#39;enter` to save the plot
+    click `s` + `enter` to save the plot
 
     Args:
         data_path (str): dataset directory path
@@ -138,6 +140,8 @@ click <code>s</code> + 'enter` to save the plot</p>
         classes (list): list of classes to be considered only
     &#34;&#34;&#34;
     data = BDDLoader(data_path, &#34;val&#34;)
+    if not os.path.exists(weights):
+        os.system(&#34;sh weights/download.sh&#34;)
     model = YOLO(weights)
 
     for image, lab, attr in data:

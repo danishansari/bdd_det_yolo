@@ -76,6 +76,8 @@ def evaluate_(data_path: str, filenames: str, weights: str, config: str) -&gt; N
             txt_path = samples.replace(&#34;/images/&#34;, &#34;/labels/&#34;)[:-4] + &#34;.txt&#34;
             os.system(f&#34;ln -s {txt_path} {txt_path.replace(&#39;val&#39;, &#39;temp&#39;)}&#34;)
             fp.write(f&#34;{samples}\n&#34;)
+    if not os.path.exists(weights):
+        os.system(&#34;sh weights/download.sh&#34;)
     model = YOLO(weights)
     model.val(data=config, split=&#34;test&#34;)
 
@@ -284,6 +286,8 @@ def evaluate(data_path: str, weights: str, config: str) -&gt; None:
             txt_path = samples.replace(&#34;/images/&#34;, &#34;/labels/&#34;)[:-4] + &#34;.txt&#34;
             os.system(f&#34;ln -s {txt_path} {txt_path.replace(&#39;val&#39;, &#39;temp&#39;)}&#34;)
             fp.write(f&#34;{samples}\n&#34;)
+    if not os.path.exists(weights):
+        os.system(&#34;sh weights/download.sh&#34;)
     model = YOLO(weights)
     model.val(data=config, split=&#34;test&#34;)</code></pre>
 </details>
