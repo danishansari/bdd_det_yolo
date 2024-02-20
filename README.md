@@ -27,6 +27,9 @@ We see here the winner is `ConvNext-S` model with AP = 36%, but one model which 
 - Model: [notebooks/model_selection.ipynb](notebooks/model_selection.ipynb)
 - Prediction: [notebooks/pred_analysis.ipynb](notebooks/pred_analysis.ipynb)
 
+## Usage
+Checkout usage [documentation](https://danishansari.github.io/bdd_det_yolo/source/main.html).
+
 ## Dataset
 - [Download](https://drive.google.com/file/d/1NgWX5YfEKbloAKX9l8kUVJFpWFlUO8UT/view) this dataset onto your local device.
 
