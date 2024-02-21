@@ -1,6 +1,9 @@
 # BDD detection Dataset Model (YOLOv5)
 YoloV5 Detection model for detection on BDD-dataset.
 
+![alt text](plots/images/tmp_rainy_pred.jpg)
+
+
 ### Pre-trained models benchmarch
 | # |  MODEL      | Backbone  | AP (Box) |
 |---|-------------|-----------|----------|
@@ -43,18 +46,22 @@ checkout `pyproject.yaml` for more
 __Note:__ modify `config/bdd-data.yaml` and pass data-path with `-d/--data-path` argument for `train`/`eval`/`infernce`/`visualize`.
 
 ## Setup
+```
+    git clone https://github.com/danishansari/bdd_det_yolo.git
+    cd bdd_det_yolo/
+```
 ### 1. Docker
 ```
-    docker  build -f docker/Dockerfile -tag bdd-yolo:latest
+    docker build -f docker/Dockerfile -t bdd-yolo:latest .
 
-    docker run --rm --gpus all -v $(pwd):/yolo-bdd -v /path/to/bdd-root-dir:/dataset -it bdd-yolo:latest
+    docker run --rm -v $(pwd):/yolo-bdd -v /path/to/bdd-root-dir:/dataset -it bdd-yolo:latest
 ```
 ### 2. Conda & Poetry
 ```
     conda create -n bdd-yolo python==3.11
     conda activate bdd-yolo
 
-    sudo apt install python3-poetry
+    sudo apt install python3-poetry 
     poetry install
 ```
 

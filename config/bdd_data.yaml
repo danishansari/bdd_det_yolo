@@ -1,4 +1,4 @@
-path: /datasets
+path: /dataset
 train: bdd100k_labels_release/bdd100k/train.txt 
 val:  bdd100k_labels_release/bdd100k/val.txt
 test:  bdd100k_images_100k/bdd100k/test.txt
