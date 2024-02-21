@@ -62,7 +62,7 @@ class BDDLoader(Dataset):
                 for line in f.readlines():
                     v = line.strip().split(" ")
                     c = int(v[0])  # class
-                    labels.append([c, list(map(float, v[1:]))])
+                    labels.append([c, list(map(float, v[1:])), 1.0])
         txt_files = (
             self.files[index].replace("/images", "/labels").replace(".jpg", "_meta.csv")
         )
@@ -85,7 +85,7 @@ class BDDLoader(Dataset):
             xyxy (bool): expected output format; defaults to True
         """
         sz = self.data.img_size
-        for c, bbox in bboxes:
+        for c, bbox, s in bboxes:
             bbox[2] = bbox[2] * sz[0]  # width
             bbox[3] = bbox[3] * sz[1]  # height
             bbox[0] = (bbox[0] * sz[0]) - (bbox[2] / 2)  # x

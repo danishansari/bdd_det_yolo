@@ -6,11 +6,14 @@ copyright: na
 
 from ultralytics import YOLO
 from data_loader import BDDLoader
+from visualize import Visualize
 from PIL import Image, ImageDraw, ImageColor, ImageFont
 import os
 
 
-def plot_predictions(image: Image, preds: list, attr: list, fname: str):
+def plot_predictions(
+    image: Image, preds: list, attr: list, fname: str, viz: Visualize
+) -> None:
     """Function to over bbox and class name on images
 
     Args:
@@ -18,19 +21,16 @@ def plot_predictions(image: Image, preds: list, attr: list, fname: str):
         preds (list): list of predictions from model
         attr (list): list of attributes associated with the image
         fname (str): name of the image file
+        viz (Visualize): visualizer for plotting predictions
     """
+    print("Plots will be saved in `plots/images/tmp.jpg`.")
+    print(
+        "Press `enter` for next, press `s` and then `enter` to save, `ctrl`+`c` to quit:"
+    )
     os.makedirs("plots/images", exist_ok=True)
-    colors = list(ImageColor.colormap.keys())[:10]
-    font = ImageFont.truetype("plots/font/Arial.ttf", 24)
-    for bbox in preds:
-        draw = ImageDraw.Draw(image)
-        draw.rectangle(bbox[1], fill=None, outline=colors[bbox[-1]], width=3)
-        draw.text((bbox[1][0] + 5, bbox[1][1]), bbox[0][:3], font=font, fill="red")
-    draw.text((5, 5), f"* {attr[0][3]}", align="left", font=font, fill="red")
-    draw.text((5, 25), f"* {attr[0][4]}", align="left", font=font, fill="red")
-    draw.text((5, 45), f"* {attr[0][5]}", align="left", font=font, fill="red")
+    image = viz.plot_labels(image, preds, attr)
     image.save("plots/images/tmp.jpg")
-    if input("> ") == "s":
+    if input(f"{fname} > ") == "s":
         image.save(f"plots/images/{os.path.basename(fname)}")
 
 
@@ -48,14 +48,11 @@ def inference(data_path: str, weights: str, classes: list = []) -> None:
     if not os.path.exists(weights):
         os.system("sh weights/download.sh")
     model = YOLO(weights)
-
+    viz = Visualize(data_path)
     for image, lab, attr in data:
         result = model(image, verbose=False)
         lab = data.scale_box(lab)
         assert len(lab) == len(attr)
-        for i in range(len(lab)):
-            assert lab[i][0] == attr[i][0]
-            lab[i] += [1.0] + attr[i][1:]
         preds = []
         for r in result:
             name = r.names
@@ -66,6 +63,6 @@ def inference(data_path: str, weights: str, classes: list = []) -> None:
             for b, p, c in zip(bbox, pred, conf):
                 if classes and name[p] not in classes:
                     continue
-                preds.append([name[p], list(map(int, b)), c, p])
+                preds.append([p, list(map(int, b)), c])
 
-        plot_predictions(image, preds, attr, data.curr_fname)
+        plot_predictions(image, preds, attr, data.curr_fname, viz)
